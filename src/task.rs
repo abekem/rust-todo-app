@@ -28,6 +28,11 @@ impl Task {
             description,
         }
     }
+    
+    /// タスクを完了する
+    pub fn done(&mut self) {
+        self.status = String::from("完了");
+    }
 }
 
 #[cfg(test)]
@@ -53,6 +58,16 @@ mod tests {
         assert_eq!(
             "id: 0, status: 未完了, name: test, description: あいうえお",
             Task::new(String::from("test"), String::from("あいうえお")).show()
+        );
+    }
+    
+    #[test]
+    fn タスクを完了する() {
+        let mut task = Task::new(String::from("test"), String::from("あいうえお"));
+        task.done();
+        assert_eq!(
+            "id: 0, status: 完了, name: test, description: あいうえお",
+            task.show()
         );
     }
 }
