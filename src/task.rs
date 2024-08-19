@@ -1,4 +1,5 @@
 /// タスクを表す構造体
+#[derive(Debug, Eq)]
 pub struct Task {
     /// ID
     id: i32,
@@ -35,6 +36,12 @@ impl Task {
     }
 }
 
+impl PartialEq for Task {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -68,6 +75,44 @@ mod tests {
         assert_eq!(
             "id: 0, status: 完了, name: test, description: あいうえお",
             task.show()
+        );
+    }
+    
+    #[test]
+    fn idが一致するタスクは等しい() {
+        let task1 = Task {
+            id: 1,
+            status: String::from("未完了"),
+            name: String::from("abc"),
+            description: String::from("def"),
+        };
+        let task2 = Task {
+            id: 1,
+            status: String::from("完了"),
+            name: String::from("ghi"),
+            description: String::from("jkl"),
+        };
+        assert_eq!(
+            task1, task2
+        );
+    }
+
+    #[test]
+    fn idが一致しないタスクは等しくない() {
+        let task1 = Task {
+            id: 1,
+            status: String::from("完了"),
+            name: String::from("abc"),
+            description: String::from("def"),
+        };
+        let task2 = Task {
+            id: 2,
+            status: String::from("完了"),
+            name: String::from("abc"),
+            description: String::from("def"),
+        };
+        assert_ne!(
+            task1, task2
         );
     }
 }
