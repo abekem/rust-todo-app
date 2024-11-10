@@ -6,12 +6,12 @@ pub struct Tasks {
 }
 
 impl Tasks {
-    // コンストラクタ
+    /// コンストラクタ
     pub fn new() -> Self {
         Self { tasks: Vec::new() }
     }
 
-    // タスク一覧を表示する
+    /// タスク一覧を表示する
     pub fn show(&self) -> String {
         // タスクがない場合はテキストを返す
         if self.tasks.is_empty() {
@@ -24,7 +24,7 @@ impl Tasks {
             .join("\n")
     }
 
-    // タスクを追加する
+    /// タスクを追加する
     pub fn add(&mut self, task: Task) {
         self.tasks.push(task);
     }
@@ -33,6 +33,12 @@ impl Tasks {
 #[cfg(test)]
 mod tests {
     use super::*;
+    
+    #[test]
+    fn タスクがない場合はテキストを返す() {
+        let tasks = Tasks::new();
+        assert_eq!("there is no task.", tasks.show());
+    }
 
     #[test]
     fn タスクの一覧を表示する() {
