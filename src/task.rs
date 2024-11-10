@@ -34,6 +34,11 @@ impl Task {
     pub fn done(&mut self) {
         self.status = String::from("完了");
     }
+    
+    /// タスクのIDが一致するか判定する
+    pub fn is_same_id(&self, id: u32) -> bool {
+        self.id == id
+    }
 }
 
 impl PartialEq for Task {

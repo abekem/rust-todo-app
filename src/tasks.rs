@@ -35,6 +35,11 @@ impl Tasks {
         let task = Task::new(id, "未完了".to_string(), name, description);
         self.add(task);
     }
+
+    /// タスクを取得する
+    pub fn find(&mut self, id: u32) -> Option<&mut Task> {
+        self.tasks.iter_mut().find(|task| task.is_same_id(id))
+    }
 }
 
 #[cfg(test)]
@@ -54,6 +59,18 @@ mod tests {
         tasks.create("test2".to_string(), "かきくけこ".to_string());
         assert_eq!(
             "id: 1, status: 未完了, name: test, description: あいうえお\nid: 2, status: 未完了, name: test2, description: かきくけこ",
+            tasks.show()
+        );
+    }
+
+    #[test]
+    fn タスクを完了させる() {
+        let mut tasks = Tasks::new();
+        tasks.create("test".to_string(), "あいうえお".to_string());
+        let task = tasks.find(1).unwrap();
+        task.done();
+        assert_eq!(
+            "id: 1, status: 完了, name: test, description: あいうえお",
             tasks.show()
         );
     }

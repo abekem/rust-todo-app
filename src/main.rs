@@ -11,6 +11,8 @@ pub enum Command {
     List,
     #[strum(serialize = "add")]
     Add,
+    #[strum(serialize = "done")]
+    Done,
     #[strum(serialize = "quit")]
     Quit,
 }
@@ -60,6 +62,18 @@ fn main() {
                 std::io::stdin().read_line(&mut input).unwrap();
                 let description = input.trim();
                 tasks.create(name.to_string(), description.to_string());
+            }
+            Command::Done => {
+                // タスクを完了
+                println!("put task id.");
+                let mut input = String::new();
+                std::io::stdin().read_line(&mut input).unwrap();
+                let id = input.trim().parse::<u32>().unwrap();
+                if let Some(task) = tasks.find(id) {
+                    task.done();
+                } else {
+                    println!("task not found.");
+                }
             }
             Command::Quit => {
                 // プログラムを終了
