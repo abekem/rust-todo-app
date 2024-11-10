@@ -7,12 +7,16 @@ pub struct Tasks {
 
 impl Tasks {
     // コンストラクタ
-    fn new(tasks: Vec<Task>) -> Self {
-        Self { tasks }
+    pub fn new() -> Self {
+        Self { tasks: Vec::new() }
     }
 
     // タスク一覧を表示する
     pub fn show(&self) -> String {
+        // タスクがない場合はテキストを返す
+        if self.tasks.is_empty() {
+            return "there is no task.".to_string();
+        }
         self.tasks
             .iter()
             .map(|task| task.show())
@@ -20,23 +24,9 @@ impl Tasks {
             .join("\n")
     }
 
-    // タスク一覧を返す
-    pub fn list() -> Tasks {
-        // 初期化したTasks構造体を返す
-        let task_a = Task::new(
-            1,
-            "未完了".to_string(),
-            "A".to_string(),
-            "description of task A".to_string(),
-        );
-        let task_b = Task::new(
-            2,
-            "実施中".to_string(),
-            "B".to_string(),
-            "description of task B".to_string(),
-        );
-
-        Tasks::new(vec![task_a, task_b])
+    // タスクを追加する
+    pub fn add(&mut self, task: Task) {
+        self.tasks.push(task);
     }
 }
 
@@ -46,22 +36,21 @@ mod tests {
 
     #[test]
     fn タスクの一覧を表示する() {
+        let mut tasks = Tasks::new();
         let task1 = Task::new(
             0,
             "未完了".to_string(),
             String::from("test"),
             String::from("あいうえお"),
         );
-        let mut task2 = Task::new(
+        let task2 = Task::new(
             0,
-            "未完了".to_string(),
+            "完了".to_string(),
             String::from("test2"),
             String::from("かきくけこ"),
         );
-        task2.done();
-        let tasks = Tasks {
-            tasks: vec![task1, task2],
-        };
+        tasks.add(task1);
+        tasks.add(task2);
         assert_eq!(
             "id: 0, status: 未完了, name: test, description: あいうえお\nid: 0, status: 完了, name: test2, description: かきくけこ",
             tasks.show()
