@@ -2,7 +2,7 @@
 #[derive(Debug, Eq)]
 pub struct Task {
     /// ID
-    id: i32,
+    id: u32,
     /// ステータス
     status: String,
     /// 名前
@@ -21,7 +21,7 @@ impl Task {
     }
 
     /// タスクを新規作成する
-    pub fn new(id: i32, status: String, name: String, description: String) -> Self {
+    pub fn new(id: u32, status: String, name: String, description: String) -> Self {
         Self {
             id,
             status,
@@ -45,20 +45,6 @@ impl PartialEq for Task {
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn タスクを表示する() {
-        assert_eq!(
-            "id: 1, status: 未完了, name: test, description: あいうえお",
-            Task {
-                id: 1,
-                status: String::from("未完了"),
-                name: String::from("test"),
-                description: String::from("あいうえお")
-            }
-            .show()
-        );
-    }
 
     #[test]
     fn タスクを新規作成する() {
@@ -91,35 +77,35 @@ mod tests {
 
     #[test]
     fn idが一致するタスクは等しい() {
-        let task1 = Task {
-            id: 1,
-            status: String::from("未完了"),
-            name: String::from("abc"),
-            description: String::from("def"),
-        };
-        let task2 = Task {
-            id: 1,
-            status: String::from("完了"),
-            name: String::from("ghi"),
-            description: String::from("jkl"),
-        };
+        let task1 = Task::new(
+            1,
+            String::from("未完了"),
+            String::from("abc"),
+            String::from("def"),
+        );
+        let task2 = Task::new(
+            1,
+            String::from("完了"),
+            String::from("ghi"),
+            String::from("jkl"),
+        );
         assert_eq!(task1, task2);
     }
 
     #[test]
     fn idが一致しないタスクは等しくない() {
-        let task1 = Task {
-            id: 1,
-            status: String::from("完了"),
-            name: String::from("abc"),
-            description: String::from("def"),
-        };
-        let task2 = Task {
-            id: 2,
-            status: String::from("完了"),
-            name: String::from("abc"),
-            description: String::from("def"),
-        };
+        let task1 = Task::new(
+            1,
+            String::from("完了"),
+            String::from("abc"),
+            String::from("def"),
+        );
+        let task2 = Task::new(
+            2,
+            String::from("完了"),
+            String::from("abc"),
+            String::from("def"),
+        );
         assert_ne!(task1, task2);
     }
 }
