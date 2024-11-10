@@ -32,7 +32,7 @@ impl Tasks {
     /// タスクを新規作成する
     pub fn create(&mut self, name: String, description: String) {
         let id = self.tasks.len() as u32 + 1;
-        let task = Task::new(id, "未完了".to_string(), name, description);
+        let task = Task::new(id, name, description);
         self.add(task);
     }
 
