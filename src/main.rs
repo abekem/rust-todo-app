@@ -2,39 +2,38 @@ mod task;
 mod tasks;
 
 const LIST: &str = "list";
+const QUIT: &str = "quit";
 
 fn main() {
     // 利用可能なコマンドの一覧
-    let available_commands = vec![LIST];
+    let available_commands = vec![LIST, QUIT];
 
-    // コマンドライン引数を取得
-    let args: Vec<String> = std::env::args().collect();
-
-    // コマンドライン引数の数によって処理を分岐
-    match args.len() {
-        // 引数が2つの場合
-        2 => {
-            // 2つ目の引数を取得
-            let command = &args[1];
-            // コマンドによって処理を分岐
-            match command.as_str() {
-                // "list"の場合
-                LIST => {
-                    // タスクの一覧を表示
-                    let tasks = tasks::Tasks::list();
-                    println!("{}", tasks.show());
-                }
-                // それ以外の場合
-                _ => {
-                    // エラーメッセージを表示
-                    eprintln!("サポートされていないコマンドです: {}", command);
-                }
+    // 無限ループ
+    loop {
+        // コマンドの入力を促す
+        println!("コマンドを入力してください");
+        // 標準入力からコマンドを受け取る
+        let mut input = String::new();
+        std::io::stdin().read_line(&mut input).unwrap();
+        let command = input.trim();
+        // コマンドによって処理を分岐
+        match command {
+            // "list"の場合
+            LIST => {
+                // タスクの一覧を表示
+                let tasks = tasks::Tasks::list();
+                println!("{}", tasks.show());
             }
-        }
-        // それ以外の場合
-        _ => {
-            // 利用可能なコマンドの一覧を表示
-            println!("利用可能なコマンド: {:?}", available_commands);
+            // "quit"の場合
+            QUIT => {
+                // プログラムを終了
+                return;
+            }
+            // それ以外の場合
+            _ => {
+                // 利用可能なコマンドの一覧を表示
+                println!("利用可能なコマンド: {:?}", available_commands);
+            }
         }
     }
 }
