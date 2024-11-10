@@ -59,13 +59,7 @@ fn main() {
                 let mut input = String::new();
                 std::io::stdin().read_line(&mut input).unwrap();
                 let description = input.trim();
-                let task = task::Task::new(
-                    0,
-                    "未完了".to_string(),
-                    name.to_string(),
-                    description.to_string(),
-                );
-                tasks.add(task);
+                tasks.create(name.to_string(), description.to_string());
             }
             Command::Quit => {
                 // プログラムを終了

@@ -25,15 +25,22 @@ impl Tasks {
     }
 
     /// タスクを追加する
-    pub fn add(&mut self, task: Task) {
+    fn add(&mut self, task: Task) {
         self.tasks.push(task);
+    }
+
+    /// タスクを新規作成する
+    pub fn create(&mut self, name: String, description: String) {
+        let id = self.tasks.len() as u32 + 1;
+        let task = Task::new(id, "未完了".to_string(), name, description);
+        self.add(task);
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn タスクがない場合はテキストを返す() {
         let tasks = Tasks::new();
@@ -43,22 +50,10 @@ mod tests {
     #[test]
     fn タスクの一覧を表示する() {
         let mut tasks = Tasks::new();
-        let task1 = Task::new(
-            0,
-            "未完了".to_string(),
-            String::from("test"),
-            String::from("あいうえお"),
-        );
-        let task2 = Task::new(
-            0,
-            "完了".to_string(),
-            String::from("test2"),
-            String::from("かきくけこ"),
-        );
-        tasks.add(task1);
-        tasks.add(task2);
+        tasks.create("test".to_string(), "あいうえお".to_string());
+        tasks.create("test2".to_string(), "かきくけこ".to_string());
         assert_eq!(
-            "id: 0, status: 未完了, name: test, description: あいうえお\nid: 0, status: 完了, name: test2, description: かきくけこ",
+            "id: 1, status: 未完了, name: test, description: あいうえお\nid: 2, status: 未完了, name: test2, description: かきくけこ",
             tasks.show()
         );
     }
