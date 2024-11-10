@@ -9,13 +9,19 @@ mod tasks;
 pub enum Command {
     #[strum(serialize = "list")]
     List,
+    #[strum(serialize = "add")]
+    Add,
     #[strum(serialize = "quit")]
     Quit,
 }
 
 fn main() {
+    // 利用可能なコマンドの一覧をlowercaseで取得
+    let commands = Command::iter()
+        .map(|c| c.to_string().to_lowercase())
+        .collect::<Vec<String>>();
     // タスクの一覧
-    let tasks = tasks::Tasks::new();
+    let mut tasks = tasks::Tasks::new();
 
     // 無限ループ
     loop {
@@ -32,22 +38,35 @@ fn main() {
                 // // エラーメッセージを表示
                 eprintln!("invalid command: {}", command);
                 // 利用可能なコマンドの一覧を表示
-                println!(
-                    "available commands: {:?}",
-                    Command::iter().collect::<Vec<_>>()
-                );
+                println!("available commands: {:?}", commands);
                 continue;
             }
         };
 
         // コマンドによって処理を分岐
         match command {
-            // "list"の場合
             Command::List => {
                 // タスクの一覧を表示
                 println!("{}", tasks.show());
             }
-            // "quit"の場合
+            Command::Add => {
+                // タスクを追加
+                println!("put task name.");
+                let mut input = String::new();
+                std::io::stdin().read_line(&mut input).unwrap();
+                let name = input.trim();
+                println!("put task description.");
+                let mut input = String::new();
+                std::io::stdin().read_line(&mut input).unwrap();
+                let description = input.trim();
+                let task = task::Task::new(
+                    0,
+                    "未完了".to_string(),
+                    name.to_string(),
+                    description.to_string(),
+                );
+                tasks.add(task);
+            }
             Command::Quit => {
                 // プログラムを終了
                 println!("bye.");
