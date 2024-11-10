@@ -19,17 +19,17 @@ impl Task {
             self.id, self.status, self.name, self.description
         )
     }
-    
+
     /// タスクを新規作成する
-    pub fn new(name: String, description: String) -> Self {
+    pub fn new(id: i32, status: String, name: String, description: String) -> Self {
         Self {
-            id: 0,
-            status: String::from("未完了"),
+            id,
+            status,
             name,
             description,
         }
     }
-    
+
     /// タスクを完了する
     pub fn done(&mut self) {
         self.status = String::from("完了");
@@ -59,25 +59,36 @@ mod tests {
             .show()
         );
     }
-    
+
     #[test]
     fn タスクを新規作成する() {
         assert_eq!(
             "id: 0, status: 未完了, name: test, description: あいうえお",
-            Task::new(String::from("test"), String::from("あいうえお")).show()
+            Task::new(
+                0,
+                "未完了".to_string(),
+                String::from("test"),
+                String::from("あいうえお")
+            )
+            .show()
         );
     }
-    
+
     #[test]
     fn タスクを完了する() {
-        let mut task = Task::new(String::from("test"), String::from("あいうえお"));
+        let mut task = Task::new(
+            0,
+            "未完了".to_string(),
+            String::from("test"),
+            String::from("あいうえお"),
+        );
         task.done();
         assert_eq!(
             "id: 0, status: 完了, name: test, description: あいうえお",
             task.show()
         );
     }
-    
+
     #[test]
     fn idが一致するタスクは等しい() {
         let task1 = Task {
@@ -92,9 +103,7 @@ mod tests {
             name: String::from("ghi"),
             description: String::from("jkl"),
         };
-        assert_eq!(
-            task1, task2
-        );
+        assert_eq!(task1, task2);
     }
 
     #[test]
@@ -111,8 +120,6 @@ mod tests {
             name: String::from("abc"),
             description: String::from("def"),
         };
-        assert_ne!(
-            task1, task2
-        );
+        assert_ne!(task1, task2);
     }
 }
