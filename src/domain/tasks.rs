@@ -25,16 +25,19 @@ impl Tasks {
             .join("\n")
     }
 
-    /// タスクを新規作成する
-    pub fn create(&mut self, name: String, description: String) {
-        let id = self.tasks.len() as u32 + 1;
-        let task = Task::new(id, name, description);
+    /// タスク配列の長さを取得する
+    pub fn len(&self) -> usize {
+        self.tasks.len()
+    }
+
+    /// タスク配列にタスクを追加する
+    pub fn push(&mut self, task: Task) {
         self.tasks.push(task);
     }
 
-    /// タスクを取得する
-    pub fn find(&mut self, id: u32) -> Option<&mut Task> {
-        self.tasks.iter_mut().find(|task| task.is_same_id(id))
+    /// タスクのイテレータを取得する
+    pub fn iter_mut(&mut self) -> std::slice::IterMut<Task> {
+        self.tasks.iter_mut()
     }
 }
 
@@ -50,23 +53,14 @@ mod tests {
 
     #[test]
     fn タスクの一覧を表示する() {
-        let mut tasks = Tasks::new();
-        tasks.create("test".to_string(), "あいうえお".to_string());
-        tasks.create("test2".to_string(), "かきくけこ".to_string());
+        let tasks = Tasks {
+            tasks: vec![
+                Task::new(1, "test".to_string(), "あいうえお".to_string()),
+                Task::new(2, "test2".to_string(), "かきくけこ".to_string()),
+            ],
+        };
         assert_eq!(
             "id: 1, status: 未完了, name: test, description: あいうえお\nid: 2, status: 未完了, name: test2, description: かきくけこ",
-            tasks.show()
-        );
-    }
-
-    #[test]
-    fn タスクを完了させる() {
-        let mut tasks = Tasks::new();
-        tasks.create("test".to_string(), "あいうえお".to_string());
-        let task = tasks.find(1).unwrap();
-        task.done();
-        assert_eq!(
-            "id: 1, status: 完了, name: test, description: あいうえお",
             tasks.show()
         );
     }

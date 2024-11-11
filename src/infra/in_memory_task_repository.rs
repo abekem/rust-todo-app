@@ -2,17 +2,20 @@ use crate::domain::task::Task;
 use crate::domain::task_repository_trait::TaskRepositoryTrait;
 use crate::domain::tasks::Tasks;
 
+/// インメモリのタスクリポジトリ
 pub struct InMemoryTaskRepository {
     tasks: Tasks,
 }
 
 impl TaskRepositoryTrait for InMemoryTaskRepository {
     fn create(&mut self, name: String, description: String) {
-        self.tasks.create(name, description);
+        let id = self.tasks.len() as u32 + 1;
+        let task = Task::new(id, name, description);
+        self.tasks.push(task);
     }
 
     fn find(&mut self, id: u32) -> Option<&mut Task> {
-        self.tasks.find(id)
+        self.tasks.iter_mut().find(|task| task.is_same_id(id))
     }
 
     fn all(&self) -> Tasks {
