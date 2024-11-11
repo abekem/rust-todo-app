@@ -1,4 +1,4 @@
-use crate::task::Task;
+use crate::domain::task::Task;
 
 pub struct Tasks {
     // フィールドの定義

@@ -1,8 +1,7 @@
 use core::str;
 use strum::{Display, EnumIter, EnumString, IntoEnumIterator, IntoStaticStr};
 
-mod task;
-mod tasks;
+mod domain;
 
 /// コマンド
 #[derive(Debug, PartialEq, Clone, Copy, EnumIter, Display, EnumString, IntoStaticStr)]
@@ -23,7 +22,7 @@ fn main() {
         .map(|c| c.to_string().to_lowercase())
         .collect::<Vec<String>>();
     // タスクの一覧
-    let mut tasks = tasks::Tasks::new();
+    let mut tasks = domain::tasks::Tasks::new();
 
     // 無限ループ
     loop {
