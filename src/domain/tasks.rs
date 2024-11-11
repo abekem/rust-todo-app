@@ -24,16 +24,11 @@ impl Tasks {
             .join("\n")
     }
 
-    /// タスクを追加する
-    fn add(&mut self, task: Task) {
-        self.tasks.push(task);
-    }
-
     /// タスクを新規作成する
     pub fn create(&mut self, name: String, description: String) {
         let id = self.tasks.len() as u32 + 1;
         let task = Task::new(id, name, description);
-        self.add(task);
+        self.tasks.push(task);
     }
 
     /// タスクを取得する
