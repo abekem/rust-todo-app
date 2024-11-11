@@ -1,5 +1,6 @@
 use crate::domain::task::Task;
 
+#[derive(Clone)]
 pub struct Tasks {
     // フィールドの定義
     tasks: Vec<Task>,

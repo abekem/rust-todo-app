@@ -2,6 +2,9 @@ use core::str;
 use strum::{Display, EnumIter, EnumString, IntoEnumIterator, IntoStaticStr};
 
 mod domain;
+mod infra;
+
+use domain::task_repository_trait::TaskRepositoryTrait;
 
 /// コマンド
 #[derive(Debug, PartialEq, Clone, Copy, EnumIter, Display, EnumString, IntoStaticStr)]
@@ -22,7 +25,9 @@ fn main() {
         .map(|c| c.to_string().to_lowercase())
         .collect::<Vec<String>>();
     // タスクの一覧
-    let mut tasks = domain::tasks::Tasks::new();
+    // let mut tasks = domain::tasks::Tasks::new();
+
+    let mut task_repository = infra::in_memory_task_repository::InMemoryTaskRepository::new();
 
     // 無限ループ
     loop {
@@ -47,7 +52,7 @@ fn main() {
         match command {
             Command::List => {
                 // タスクの一覧を表示
-                println!("{}", tasks.show());
+                println!("{}", task_repository.all().show());
             }
             Command::Add => {
                 // タスクを追加
@@ -57,14 +62,14 @@ fn main() {
                 println!("put task description.");
                 let input = read();
                 let description = input.trim();
-                tasks.create(name.to_string(), description.to_string());
+                task_repository.create(name.to_string(), description.to_string());
             }
             Command::Done => {
                 // タスクを完了
                 println!("put task id.");
                 let input = read();
                 let id = input.trim().parse::<u32>().unwrap();
-                if let Some(task) = tasks.find(id) {
+                if let Some(task) = task_repository.find(id) {
                     task.done();
                 } else {
                     println!("task not found.");

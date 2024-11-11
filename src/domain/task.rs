@@ -1,7 +1,7 @@
 use strum::Display;
 
 /// タスクを表す構造体
-#[derive(Debug, Eq)]
+#[derive(Debug, Eq, Clone)]
 pub struct Task {
     /// ID
     id: u32,
@@ -14,7 +14,7 @@ pub struct Task {
 }
 
 /// タスクのステータス
-#[derive(Debug, Eq, PartialEq, Display)]
+#[derive(Debug, Eq, PartialEq, Display, Clone)]
 enum Status {
     #[strum(to_string = "未完了")]
     Todo,
