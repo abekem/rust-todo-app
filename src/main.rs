@@ -24,9 +24,8 @@ fn main() {
     let commands = Command::iter()
         .map(|c| c.to_string().to_lowercase())
         .collect::<Vec<String>>();
-    // タスクの一覧
-    // let mut tasks = domain::tasks::Tasks::new();
 
+    // タスクリポジトリ
     let mut task_repository = infra::in_memory_task_repository::InMemoryTaskRepository::new();
 
     // 無限ループ
