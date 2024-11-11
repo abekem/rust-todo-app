@@ -19,11 +19,18 @@ pub enum Command {
     Quit,
 }
 
+impl Command {
+    /// コマンドの一覧を表示する
+    pub fn show_all() -> Vec<String> {
+        Command::iter()
+            .map(|c| c.to_string().to_lowercase())
+            .collect()
+    }
+}
+
 fn main() {
-    // 利用可能なコマンドの一覧をlowercaseで取得
-    let commands = Command::iter()
-        .map(|c| c.to_string().to_lowercase())
-        .collect::<Vec<String>>();
+    // 利用可能なコマンドの一覧を取得
+    let commands = Command::show_all();
 
     // タスクリポジトリ
     let mut task_repository = infra::in_memory_task_repository::InMemoryTaskRepository::new();
