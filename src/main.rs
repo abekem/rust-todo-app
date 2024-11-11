@@ -30,8 +30,7 @@ fn main() {
         // コマンドの入力を促す
         println!("put command.");
         // 標準入力からコマンドを受け取る
-        let mut input = String::new();
-        std::io::stdin().read_line(&mut input).unwrap();
+        let input = read();
         let command = input.trim();
         // 文字列をコマンドに変換
         let command = match command.parse::<Command>() {
@@ -54,20 +53,17 @@ fn main() {
             Command::Add => {
                 // タスクを追加
                 println!("put task name.");
-                let mut input = String::new();
-                std::io::stdin().read_line(&mut input).unwrap();
+                let input = read();
                 let name = input.trim();
                 println!("put task description.");
-                let mut input = String::new();
-                std::io::stdin().read_line(&mut input).unwrap();
+                let input = read();
                 let description = input.trim();
                 tasks.create(name.to_string(), description.to_string());
             }
             Command::Done => {
                 // タスクを完了
                 println!("put task id.");
-                let mut input = String::new();
-                std::io::stdin().read_line(&mut input).unwrap();
+                let input = read();
                 let id = input.trim().parse::<u32>().unwrap();
                 if let Some(task) = tasks.find(id) {
                     task.done();
@@ -82,4 +78,11 @@ fn main() {
             }
         }
     }
+}
+
+/// 入力を受け付ける
+fn read() -> String {
+    let mut input = String::new();
+    std::io::stdin().read_line(&mut input).unwrap();
+    input
 }
