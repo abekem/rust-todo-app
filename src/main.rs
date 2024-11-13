@@ -21,41 +21,15 @@ pub enum Command {
 
 impl Command {
     /// コマンドの一覧を表示する
-    pub fn show_all() -> Vec<String> {
+    pub fn get_all() -> Vec<String> {
         Command::iter()
             .map(|c| c.to_string().to_lowercase())
             .collect()
     }
-}
 
-fn main() {
-    // 利用可能なコマンドの一覧を取得
-    let commands = Command::show_all();
-
-    // タスクリポジトリ
-    let mut task_repository = infra::in_memory_task_repository::InMemoryTaskRepository::new();
-
-    // 無限ループ
-    loop {
-        // コマンドの入力を促す
-        println!("put command.");
-        // 標準入力からコマンドを受け取る
-        let input = read();
-        let command = input.trim();
-        // 文字列をコマンドに変換
-        let command = match command.parse::<Command>() {
-            Ok(command) => command,
-            Err(_) => {
-                // // エラーメッセージを表示
-                eprintln!("invalid command: {}", command);
-                // 利用可能なコマンドの一覧を表示
-                println!("available commands: {:?}", commands);
-                continue;
-            }
-        };
-
-        // コマンドによって処理を分岐
-        match command {
+    /// コマンドを実行する
+    pub fn execute(&self, task_repository: &mut impl TaskRepositoryTrait) {
+        match self {
             Command::List => {
                 // タスクの一覧を表示
                 println!("{}", task_repository.all().show());
@@ -87,6 +61,36 @@ fn main() {
                 return;
             }
         }
+    }
+}
+
+fn main() {
+    // 利用可能なコマンドの一覧を取得
+    let commands = Command::get_all();
+
+    // タスクリポジトリ
+    let mut task_repository = infra::in_memory_task_repository::InMemoryTaskRepository::new();
+
+    // 無限ループ
+    loop {
+        // コマンドの入力を促す
+        println!("put command.");
+        // 標準入力からコマンドを受け取る
+        let input = read();
+        let command = input.trim();
+        // 文字列をコマンドに変換
+        let command = match command.parse::<Command>() {
+            Ok(command) => command,
+            Err(_) => {
+                // // エラーメッセージを表示
+                eprintln!("invalid command: {}", command);
+                // 利用可能なコマンドの一覧を表示
+                println!("available commands: {:?}", commands);
+                continue;
+            }
+        };
+        // コマンドを実行
+        command.execute(&mut task_repository);
     }
 }
 
