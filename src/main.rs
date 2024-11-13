@@ -32,11 +32,12 @@ impl Command {
     }
 
     /// コマンドを実行する
-    pub fn execute(&self, task_repository: &mut impl TaskRepositoryTrait) {
+    pub fn execute(&self, task_repository: &mut impl TaskRepositoryTrait) -> bool {
         match self {
             Command::List => {
                 // タスクの一覧を表示
                 println!("{}", task_repository.all().show());
+                false
             }
             Command::Add => {
                 // タスクを追加
@@ -47,6 +48,7 @@ impl Command {
                 let input = read();
                 let description = input.trim();
                 task_repository.create(name.to_string(), description.to_string());
+                false
             }
             Command::Update => {
                 // タスクを更新
@@ -60,6 +62,7 @@ impl Command {
                 let input = read();
                 let description = input.trim();
                 task_repository.update(id, name.to_string(), description.to_string());
+                false
             }
             Command::Delete => {
                 // タスクを削除
@@ -67,6 +70,7 @@ impl Command {
                 let input = read();
                 let id = input.trim().parse::<u32>().unwrap();
                 task_repository.delete(id);
+                false
             }
             Command::Done => {
                 // タスクを完了
@@ -78,11 +82,12 @@ impl Command {
                 } else {
                     println!("task not found.");
                 }
+                false
             }
             Command::Quit => {
                 // プログラムを終了
                 println!("bye.");
-                return;
+                true
             }
         }
     }
@@ -114,7 +119,10 @@ fn main() {
             }
         };
         // コマンドを実行
-        command.execute(&mut task_repository);
+        let is_finish = command.execute(&mut task_repository);
+        if is_finish {
+            break;
+        }
     }
 }
 
