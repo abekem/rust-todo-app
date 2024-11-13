@@ -8,18 +8,28 @@ pub struct InMemoryTaskRepository {
 }
 
 impl TaskRepositoryTrait for InMemoryTaskRepository {
-    fn create(&mut self, name: String, description: String) {
-        let id = self.tasks.len() as u32 + 1;
-        let task = Task::new(id, name, description);
-        self.tasks.push(task);
+    fn all(&self) -> Tasks {
+        self.tasks.clone()
     }
 
     fn find(&mut self, id: u32) -> Option<&mut Task> {
         self.tasks.iter_mut().find(|task| task.is_same_id(id))
     }
 
-    fn all(&self) -> Tasks {
-        self.tasks.clone()
+    fn create(&mut self, name: String, description: String) {
+        let id = self.tasks.len() as u32 + 1;
+        let task = Task::create(id, name, description);
+        self.tasks.push(task);
+    }
+
+    fn update(&mut self, id: u32, name: String, description: String) {
+        let task = self.find(id).unwrap();
+        task.update_name(name);
+        task.update_description(description);
+    }
+
+    fn delete(&mut self, id: u32) {
+        self.tasks.delete(id);
     }
 }
 
@@ -60,6 +70,29 @@ mod tests {
         task.done();
         assert_eq!(
             "id: 1, status: 完了, name: test, description: あいうえお",
+            repository.all().show()
+        );
+    }
+
+    #[test]
+    fn タスクを更新する() {
+        let mut repository = InMemoryTaskRepository::new();
+        repository.create("test".to_string(), "あいうえお".to_string());
+        repository.update(1, "test2".to_string(), "かきくけこ".to_string());
+        assert_eq!(
+            "id: 1, status: 未完了, name: test2, description: かきくけこ",
+            repository.all().show()
+        );
+    }
+
+    #[test]
+    fn タスクを削除する() {
+        let mut repository = InMemoryTaskRepository::new();
+        repository.create("test".to_string(), "あいうえお".to_string());
+        repository.create("test2".to_string(), "かきくけこ".to_string());
+        repository.delete(1);
+        assert_eq!(
+            "id: 2, status: 未完了, name: test2, description: かきくけこ",
             repository.all().show()
         );
     }

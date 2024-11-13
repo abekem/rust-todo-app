@@ -39,6 +39,11 @@ impl Tasks {
     pub fn iter_mut(&mut self) -> std::slice::IterMut<Task> {
         self.tasks.iter_mut()
     }
+
+    /// タスク一覧から削除する
+    pub fn delete(&mut self, id: u32) {
+        self.tasks.retain(|t| !t.is_same_id(id));
+    }
 }
 
 #[cfg(test)]
@@ -55,12 +60,27 @@ mod tests {
     fn タスクの一覧を表示する() {
         let tasks = Tasks {
             tasks: vec![
-                Task::new(1, "test".to_string(), "あいうえお".to_string()),
-                Task::new(2, "test2".to_string(), "かきくけこ".to_string()),
+                Task::create(1, "test".to_string(), "あいうえお".to_string()),
+                Task::create(2, "test2".to_string(), "かきくけこ".to_string()),
             ],
         };
         assert_eq!(
             "id: 1, status: 未完了, name: test, description: あいうえお\nid: 2, status: 未完了, name: test2, description: かきくけこ",
+            tasks.show()
+        );
+    }
+
+    #[test]
+    fn タスク一覧から削除する() {
+        let mut tasks = Tasks {
+            tasks: vec![
+                Task::create(1, "test".to_string(), "あいうえお".to_string()),
+                Task::create(2, "test2".to_string(), "かきくけこ".to_string()),
+            ],
+        };
+        tasks.delete(1);
+        assert_eq!(
+            "id: 2, status: 未完了, name: test2, description: かきくけこ",
             tasks.show()
         );
     }

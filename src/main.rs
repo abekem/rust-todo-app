@@ -13,6 +13,10 @@ pub enum Command {
     List,
     #[strum(serialize = "add")]
     Add,
+    #[strum(serialize = "update")]
+    Update,
+    #[strum(serialize = "delete")]
+    Delete,
     #[strum(serialize = "done")]
     Done,
     #[strum(serialize = "quit")]
@@ -43,6 +47,26 @@ impl Command {
                 let input = read();
                 let description = input.trim();
                 task_repository.create(name.to_string(), description.to_string());
+            }
+            Command::Update => {
+                // タスクを更新
+                println!("put task id.");
+                let input = read();
+                let id = input.trim().parse::<u32>().unwrap();
+                println!("put task name.");
+                let input = read();
+                let name = input.trim();
+                println!("put task description.");
+                let input = read();
+                let description = input.trim();
+                task_repository.update(id, name.to_string(), description.to_string());
+            }
+            Command::Delete => {
+                // タスクを削除
+                println!("put task id.");
+                let input = read();
+                let id = input.trim().parse::<u32>().unwrap();
+                task_repository.delete(id);
             }
             Command::Done => {
                 // タスクを完了
