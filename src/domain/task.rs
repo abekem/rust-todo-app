@@ -65,6 +65,11 @@ impl Task {
     pub fn update_description(&mut self, description: String) {
         self.description = description;
     }
+
+    /// タスクのIDを取得する
+    pub fn get_id(&self) -> u32 {
+        self.id
+    }
 }
 
 impl PartialEq for Task {

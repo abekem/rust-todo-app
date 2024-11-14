@@ -47,7 +47,9 @@ impl Command {
                 println!("put task description.");
                 let input = read();
                 let description = input.trim();
-                task_repository.create(name.to_string(), description.to_string());
+                task_repository
+                    .create(name.to_string(), description.to_string())
+                    .unwrap();
                 false
             }
             Command::Update => {

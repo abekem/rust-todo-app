@@ -7,7 +7,7 @@ pub trait TaskRepositoryTrait {
     /// タスクを取得する
     fn find(&mut self, id: u32) -> Option<&mut Task>;
     /// タスクを作成する
-    fn create(&mut self, name: String, description: String);
+    fn create(&mut self, name: String, description: String) -> Result<(), String>;
     /// タスクを更新する
     fn update(&mut self, id: u32, name: String, description: String);
     /// タスクを削除する

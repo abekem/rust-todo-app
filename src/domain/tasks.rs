@@ -25,14 +25,14 @@ impl Tasks {
             .join("\n")
     }
 
-    /// タスク配列の長さを取得する
-    pub fn len(&self) -> usize {
-        self.tasks.len()
-    }
-
     /// タスク配列にタスクを追加する
-    pub fn push(&mut self, task: Task) {
+    pub fn push(&mut self, task: Task) -> Result<(), String> {
+        // IDが重複している場合はエラー
+        if self.tasks.iter().any(|t| t.is_same_id(task.get_id())) {
+            return Err("ID is duplicated.".to_string());
+        }
         self.tasks.push(task);
+        Ok(())
     }
 
     /// タスクのイテレータを取得する
@@ -82,6 +82,41 @@ mod tests {
         assert_eq!(
             "id: 2, status: 未完了, name: test2, description: かきくけこ",
             tasks.show()
+        );
+    }
+
+    #[test]
+    fn タスクを追加する() {
+        let mut tasks = Tasks::new();
+        tasks
+            .push(Task::create(
+                1,
+                "test".to_string(),
+                "あいうえお".to_string(),
+            ))
+            .unwrap();
+        assert_eq!(
+            "id: 1, status: 未完了, name: test, description: あいうえお",
+            tasks.show()
+        );
+    }
+
+    #[test]
+    fn idが重複している場合はエラーを返す() {
+        let mut tasks = Tasks {
+            tasks: vec![Task::create(
+                1,
+                "test".to_string(),
+                "あいうえお".to_string(),
+            )],
+        };
+        assert_eq!(
+            Err("ID is duplicated.".to_string()),
+            tasks.push(Task::create(
+                1,
+                "test2".to_string(),
+                "かきくけこ".to_string()
+            ))
         );
     }
 }
