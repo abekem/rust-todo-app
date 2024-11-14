@@ -105,7 +105,7 @@ fn main() {
     // 無限ループ
     loop {
         // コマンドの入力を促す
-        println!("put command.");
+        println!("put command. available commands: {:?}", commands);
         // 標準入力からコマンドを受け取る
         let input = read();
         let command = input.trim();
@@ -115,8 +115,6 @@ fn main() {
             Err(_) => {
                 // // エラーメッセージを表示
                 eprintln!("invalid command: {}", command);
-                // 利用可能なコマンドの一覧を表示
-                println!("available commands: {:?}", commands);
                 continue;
             }
         };
@@ -125,6 +123,10 @@ fn main() {
         if is_finish {
             break;
         }
+        println!("---\n");
+        println!("results:");
+        Command::List.execute(&mut task_repository);
+        println!("---\n");
     }
 }
 
